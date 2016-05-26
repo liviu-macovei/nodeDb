@@ -29,7 +29,7 @@ app.get('/users/GetAll', function(req, res) {
 
 // Rote to handle single user
 app.get('/users/:id', function(req, res) {
-    User.getUserById(req.params._id ,function(err,user){
+    Users.getUserById(req.params._id ,function(err,user){
         if(err){
             throw err;
         }
