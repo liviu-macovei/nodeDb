@@ -8,11 +8,11 @@ var url = 'mongodb://nodeclass:1234567@ds023418.mlab.com:23418/nirsdb';
 
 // route to handle all users
 app.get('/users/GetAll', function(req, res) {
-    Users.getUsers(function(err,genre){
+    Users.getUsers(function(err,users){
         if(err){
             throw err;
         }
-        res.json(genre);
+        res.json(users);
     });
   /*  MongoClient.connect(url, function(err, db) {
 
@@ -29,8 +29,13 @@ app.get('/users/GetAll', function(req, res) {
 
 // Rote to handle single user
 app.get('/users/:id', function(req, res) {
-
-    if (req.params.id.length === 12 || req.params.id.length === 24) {
+    User.getUserById(req.params._id ,function(err,user){
+        if(err){
+            throw err;
+        }
+        res.json(user);
+    });
+   /* if (req.params.id.length === 12 || req.params.id.length === 24) {
         MongoClient.connect(url, function(err, db) {
 
             if (err) {
@@ -57,7 +62,7 @@ app.get('/users/:id', function(req, res) {
     } else {
         res.status(400);
         res.send({'msg' : '400 Bad Request'});
-    }
+    }*/
 
 
 });
