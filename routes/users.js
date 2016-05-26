@@ -2,16 +2,19 @@ var express = require('express');
 var app = express();
 var MongoClient = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
-
-
-
+Users = require('./Models/User');
 
 var url = 'mongodb://nodeclass:1234567@ds023418.mlab.com:23418/nirsdb';
 
 // route to handle all users
 app.get('/users/GetAll', function(req, res) {
-
-    MongoClient.connect(url, function(err, db) {
+    Users.getUsers(function(err,users){
+        if(err){
+            throw err;
+        }
+        res.json(users);
+    });
+  /*  MongoClient.connect(url, function(err, db) {
 
         var collection = db.collection('users');
 
@@ -20,14 +23,19 @@ app.get('/users/GetAll', function(req, res) {
             res.send(data);
             db.close();
         });
-    });
+    });*/
 });
 
 
 // Rote to handle single user
 app.get('/users/:id', function(req, res) {
-
-    if (req.params.id.length === 12 || req.params.id.length === 24) {
+    User.getUserById(req.params._id ,function(err,user){
+        if(err){
+            throw err;
+        }
+        res.json(user);
+    });
+   /* if (req.params.id.length === 12 || req.params.id.length === 24) {
         MongoClient.connect(url, function(err, db) {
 
             if (err) {
@@ -54,7 +62,7 @@ app.get('/users/:id', function(req, res) {
     } else {
         res.status(400);
         res.send({'msg' : '400 Bad Request'});
-    }
+    }*/
 
 
 });
