@@ -3,66 +3,76 @@ var app = express();
 var MongoClient = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
 Users = require('../Models/User');
+var mongoose = require('mongoose');
 
 var url = 'mongodb://nodeclass:1234567@ds023418.mlab.com:23418/nirsdb';
 
 // route to handle all users
-app.get('/users/GetAll', function(req, res) {
-    Users.getUsers(function(err,users){
-        if(err){
+app.get('/users/', function (req, res) {
+    Users.getUsers(function (err, users) {
+        if (err) {
             throw err;
         }
         res.json(users);
     });
-  /*  MongoClient.connect(url, function(err, db) {
+    /*  MongoClient.connect(url, function(err, db) {
 
-        var collection = db.collection('users');
+     var collection = db.collection('users');
 
-        collection.find({}).toArray(function(err, data) {
+     collection.find({}).toArray(function(err, data) {
 
-            res.send(data);
-            db.close();
-        });
-    });*/
+     res.send(data);
+     db.close();
+     });
+     });*/
 });
 
-
-// Rote to handle single user
-app.get('/users/:id', function(req, res) {
-    Users.getUserById(req.params._id ,function(err,user){
-        if(err){
+app.post('/users', function (req, res) {
+    var user = req.body;
+    Users.addUser(user, function (err, user) {
+        if (err) {
             throw err;
         }
         res.json(user);
     });
-   /* if (req.params.id.length === 12 || req.params.id.length === 24) {
-        MongoClient.connect(url, function(err, db) {
+});
 
-            if (err) {
-                res.status(500);
-                res.send({ "msg": "Internal Server Error" });
-                db.close();
-                return;
-            }
+// Rote to handle single user
+app.get('/users/:id', function (req, res) {
+    Users.getUserById({ '_id': ObjectId(req.params.id) }, function (err, user) {
+        if (err) {
+            throw err;
+        }
+        res.json(user);
+    });
+    /* if (req.params.id.length === 12 || req.params.id.length === 24) {
+     MongoClient.connect(url, function(err, db) {
 
-            var collection = db.collection('users');
+     if (err) {
+     res.status(500);
+     res.send({ "msg": "Internal Server Error" });
+     db.close();
+     return;
+     }
 
-            collection.findOne({ '_id': ObjectId(req.params.id) }, function(err, data) {
+     var collection = db.collection('users');
 
-                if (data === null) {
-                    res.status(404);
-                    res.send({ "msg": "User Not Found" });
-                } else {
-                    res.send(data);
-                }
+     collection.findOne({ '_id': ObjectId(req.params.id) }, function(err, data) {
 
-                db.close();
-            });
-        });
-    } else {
-        res.status(400);
-        res.send({'msg' : '400 Bad Request'});
-    }*/
+     if (data === null) {
+     res.status(404);
+     res.send({ "msg": "User Not Found" });
+     } else {
+     res.send(data);
+     }
+
+     db.close();
+     });
+     });
+     } else {
+     res.status(400);
+     res.send({'msg' : '400 Bad Request'});
+     }*/
 
 
 });
@@ -70,11 +80,11 @@ app.get('/users/:id', function(req, res) {
 // Route that handles creation of new user
 
 
-app.delete('/users/:id', function(req, res) {
+app.delete('/users/:id', function (req, res) {
 
-    MongoClient.connect(url, function(err, db) {
+    MongoClient.connect(url, function (err, db) {
 
-        if(err){
+        if (err) {
             res.status(505);
             res.send({'msg': 'Database err'})
 
@@ -92,59 +102,21 @@ app.delete('/users/:id', function(req, res) {
     });
 });
 
-
-
-// Route that handles delete of  user
-
-app.post('/users', function(req, res) {
-    MongoClient.connect(url, function(err, db) {
-
-        var collection = db.collection('users');
-
-        collection.insert(req.body, function(err, data) {
-
-            res.send({ 'msg': 'user created' });
-            db.close();
-        });
-    });
-});
-
 // Route that handles updates of a user
 
-app.put('/users/:id', function(req, res) {
-    MongoClient.connect(url, function(err, db) {
+app.put('/users/:id', function (req, res) {
+    MongoClient.connect(url, function (err, db) {
 
         var collection = db.collection('users');
 
-        collection.update({ '_id': ObjectId(req.params.id) }, {
+        collection.update({'_id': ObjectId(req.params.id)}, {
             $set: req.body
-        }, function(err, data) {
+        }, function (err, data) {
 
-            res.send({ 'msg': 'user updated' });
+            res.send({'msg': 'user updated'});
             db.close();
         });
     });
 });
 
 module.exports = app;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

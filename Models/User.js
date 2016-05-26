@@ -7,16 +7,16 @@ var Schema = mongoose.Schema;
 
 // create a schema
 var userSchema = new Schema({
-    firstname: { type: String, required: true},
-    lastname:{ type: String, required: true},
-    email: { type: String, required: true},
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    birthdate: { type: Date, required: true},
-    gender:{ type: String, required: true},
-    interestedId:{ type: String, required: true},
-    occupation:{ type: String, required: true},
-    hobby:{ type: String, required: true},
+    firstname: { type: String},
+    lastname:{ type: String},
+    email: { type: String},
+    username: { type: String, unique: true },
+    password: { type: String },
+    birthdate: { type: Date},
+    gender:{ type: String},
+    interestedId:{ type: String},
+    occupation:{ type: String},
+    hobby:{ type: String},
     created_at: Date,
     updated_at: Date
 });
@@ -38,7 +38,7 @@ userSchema.pre('save', function(next) {
 
 // the schema is useless so far
 // we need to create a model using it
-var User = module.exports = mongoose.model('User',userSchema);
+var User = module.exports = mongoose.model('User',userSchema,'users');
 
 //Get User
 
@@ -47,7 +47,7 @@ module.exports.getUsers = function (callback , limit) {
 };
 //Get User
 module.exports.getUserById = function (id,callback) {
-    User.findById(id ,callback);
+    User.findOne(id ,callback);
 };
 //Add user
 module.exports.addUser = function(user, callback){
