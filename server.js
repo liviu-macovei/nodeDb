@@ -1,11 +1,9 @@
 var express = require('express');
 var app = express();
 var BodyParser = require('body-parser'); // middle
-
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://nodeclass:1234567@ds023418.mlab.com:23418/nirsdb');
 var users = require('./routes/users.js');
-
-
-
 
 // middleware
 app.use(BodyParser.urlencoded({

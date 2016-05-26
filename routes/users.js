@@ -2,16 +2,19 @@ var express = require('express');
 var app = express();
 var MongoClient = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
-
-
-
+Users = require('./Models/User');
 
 var url = 'mongodb://nodeclass:1234567@ds023418.mlab.com:23418/nirsdb';
 
 // route to handle all users
 app.get('/users/GetAll', function(req, res) {
-
-    MongoClient.connect(url, function(err, db) {
+    Users.getUsers(function(err,genre){
+        if(err){
+            throw err;
+        }
+        res.json(genre);
+    });
+  /*  MongoClient.connect(url, function(err, db) {
 
         var collection = db.collection('users');
 
@@ -20,7 +23,7 @@ app.get('/users/GetAll', function(req, res) {
             res.send(data);
             db.close();
         });
-    });
+    });*/
 });
 
 
